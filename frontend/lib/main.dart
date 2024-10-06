@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:frontend/views/todo_views.dart';
 import 'package:http/http.dart' as http;
 
 // Hàm main là điểm bắt đầu của ứng dụng
@@ -17,7 +18,7 @@ class MainApp extends StatelessWidget {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Ứng dụng full-stack đơn giản',
-      home: MyHomePage(),
+      home: TodoViews(),
     );
   }
 }
