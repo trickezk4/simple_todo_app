@@ -16,7 +16,11 @@ class TodoRouter {
     router.post('/todos', _addTodoHandler);
 
     router.delete('/todos/<id>', _deleteHandler);
+
+    router.put('/todos/<id>', _updateHandler);
+    
     return router;
+
   }
 
   static final _headers = {'Content-Type': 'application/json'};
@@ -65,6 +69,32 @@ class TodoRouter {
       final removeTodo = _todos.removeAt(index);
       return Response.ok(
         removeTodo.toJson(),
+        headers: _headers
+      );
+    } catch(e) {
+      return Response.internalServerError(
+        body: json.encode({'error': e.toString()}),
+        headers: _headers
+      );
+    }
+  }
+
+  Future<Response> _updateHandler(Request req, String id) async {
+    try{
+      final index = _todos.indexWhere((todo) => todo.id == int.parse(id));
+      
+      if(index == -1) {
+        return Response.notFound('Không tìm thấy todo có id = $id');
+      }
+
+      final payload = await req.readAsString();
+      final map = json.decode(payload);
+      final updateTodo = TodoModel.fromMap(map);
+      
+      _todos[index] = updateTodo;
+
+      return Response.ok(
+        updateTodo.toJson(),
         headers: _headers
       );
     } catch(e) {
